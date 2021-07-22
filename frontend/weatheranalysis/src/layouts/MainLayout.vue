@@ -1,119 +1,122 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="hHh lpR fFf" >
+
+    <q-header elevated className="bg-blue-grey-9 text-white" height-hint="98">
       <q-toolbar>
         <q-btn
           flat
           dense
           round
+          @click="leftDrawerOpen = !leftDrawerOpen"
           icon="menu"
           aria-label="Menu"
-          @click="toggleLeftDrawer"
         />
-
         <q-toolbar-title>
-          Quasar App
+          Weather Analysis
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
-
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      class="bg-grey-1"
+      content-class="bg-primary text-white"
     >
       <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+        <q-item to="/index" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="dashboard"/>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Dashboard</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item to="/Mail" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="email"/>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Temperature Forecast</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item to="/Mail" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="email"/>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Wind Speed Forecast</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item to="/Mail" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="email"/>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Rainfall Forecast</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item to="/About" active-class="q-item-no-link-highlighting">
+        <q-item-section avatar>
+          <q-icon name="email"/>
+        </q-item-section>
+        <q-item-section>
+          <q-item-label>About us</q-item-label>
+        </q-item-section>
+        </q-item>
+        <q-item to="/login" @click="onLogout" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="email"/>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Logout</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
-    <q-page-container>
-      <router-view />
+    <q-page-container style="padding-top: 0">
+      <router-view/>
     </q-page-container>
+
   </q-layout>
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
-
-import { defineComponent, ref } from 'vue'
-
-export default defineComponent({
-  name: 'MainLayout',
-
-  components: {
-    EssentialLink
-  },
-
-  setup () {
-    const leftDrawerOpen = ref(false)
-
+export default {
+  data() {
     return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
+      leftDrawerOpen: false,
+      loggedIn: false
+    }
+  },
+  created() {
+    this.loggedIn = sessionStorage.getItem('loggedIn') !== null
+    const timer = setInterval(() => {
+      this.checkLogin();
+    }, 500)
+  },
+  methods: {
+
+    onLogout() {
+      console.log('logout')
+      sessionStorage.removeItem('loggedIn')
+      sessionStorage.removeItem('userid')
+      sessionStorage.removeItem('role')
+      this.loggedIn = true
+      this.$router.replace('/')
+    },
+    checkLogin() {
+      this.loggedIn = sessionStorage.getItem('loggedIn') !== null
+      if(this.loggedIn) {
+        if(this.$route.path === '/' || this.$route.path === '/reg')
+          this.$router.push('/index')
+      }
+      else {
+
+        if(this.$route.path !== '/' && this.$route.path !== '/reg')
+          this.$router.push('/login')
       }
     }
   }
-})
+}
 </script>
