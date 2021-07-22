@@ -1,6 +1,5 @@
-
 <template class="fullscreen ">
-  <div class="skyline">
+
   <q-card class="absolute-center" style="width: 20%">
     <div class="text-h1 text-center q-my-lg">
       Login
@@ -37,7 +36,7 @@
       </div>
     </q-form>
   </q-card>
-  </div>
+
 </template>
 
 <script>
@@ -92,11 +91,11 @@ export default {
 <style scoped>
 </style>
 <style lang="sass">
-.skyline
-  background: linear-gradient(to right, #c31432, #240b36) /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-.trees
-  flex: 0 0 100px
-  background: url(../static/trees.png)
-  background-size: contain
-  background-position: center bottom
+  .q-page
+    background: linear-gradient(to right, #c31432, #240b36) /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  .trees
+    flex: 0 0 100px
+    background: url(../static/trees.png)
+    background-size: contain
+    background-position: center bottom
 </style>
