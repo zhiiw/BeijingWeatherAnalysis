@@ -10,6 +10,7 @@ const routes = [
       { path: '/login', component: () => import('pages/login.vue')},
       { path: '/reg', component: () => import('pages/reg.vue')},
       { path: '/temperature', component: () => import('pages/temperature.vue')},
+      { path: '/wind', component: () => import('pages/calendar.vue')},
 
 
 
