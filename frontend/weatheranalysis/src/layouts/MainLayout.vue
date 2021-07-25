@@ -31,7 +31,7 @@
             <q-item-label>Dashboard</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/Mail" active-class="q-item-no-link-highlighting">
+        <q-item to="/temperature" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
             <q-icon name="email"/>
           </q-item-section>
@@ -39,7 +39,7 @@
             <q-item-label>Temperature Forecast</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/Mail" active-class="q-item-no-link-highlighting">
+        <q-item to="/wind" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
             <q-icon name="email"/>
           </q-item-section>

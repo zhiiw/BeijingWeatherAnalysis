@@ -62,6 +62,7 @@ export default {
     }
   },
   created() {
+    /*
     this.$axios(`https://api.openweathermap.org/data/2.5/weather?q=Beijing&appid=ef1942f6f1f4a6fc239f6a48c0b47a38&units=metric`).then(response=>{
     console.log('response',response)
     this.weatherData=response.data
@@ -78,17 +79,19 @@ export default {
     this.username = sessionStorage.getItem('loggedIn')
     this.user_id = sessionStorage.getItem('user_id')
     this.isAdmin = sessionStorage.getItem('role') === '1'
+
+
   },
   mounted() {
     let _this = this
-    this.$axios.get('http://127.0.0.1:8000/api/random').then(function (response) {
+    /*this.$axios.get('http://127.0.0.1:8000/api/random').then(function (response) {
       console.log(response)
       let res = response.data
       _this.random_house_decoration = res.decoration
       _this.random_house_price = res.price
       _this.random_house_unit_type = res.unit_type
       _this.random_house_id = res.house_id
-    })
+    })*/
   },
   methods: {
     goRandom() {
