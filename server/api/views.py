@@ -20,9 +20,11 @@ def login(request):
     if request.method == 'GET':
         dic['status'] = "Failed"
         dic['message'] = "Wrong Method"
+        print(dic)
         return HttpResponse(json.dumps(dic))
     try:
         post_content = json.loads(request.body)
+        print(post_content)
         username = post_content['username']
         password = post_content['password']
         user = User.objects.get(username=username)
@@ -38,10 +40,12 @@ def login(request):
 
         dic['status'] = "Success"
         dic['user_id'] = user.id
+        print(dic)
         return HttpResponse(json.dumps(dic))
     else:
         dic['message'] = "Wrong Password"
         dic['status'] = "Failed"
+        print(dic)
         return HttpResponse(json.dumps(dic))
 
 
@@ -108,10 +112,6 @@ def get_temp(request):
 
 @csrf_exempt
 def forecast_Beijing(request):  #北京未来七天温度预测
-    if request.method != 'POST':
-        dic = {'status': "Failed", 'message': "Wrong Method"}
-        return HttpResponse(json.dumps(dic))
-
     x = []
     ymin = []
     yavg = []
