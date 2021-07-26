@@ -3,12 +3,15 @@
 
   <div id="q-app" style="min-height: 100vh;">
 
-    <q-select v-model="model" :options="options" label="Standard" model-value="Beijing"></q-select>
+    <q-select v-model="model" class="absolute-top-right" :options="options" label="Standard" model-value="Beijing"></q-select>
 
     <div class="q-pa-md">
       <q-date
         v-model="date"
         landscape
+        class="fa-1x"
+        navigation-min-year-month="2021/07"
+        navigation-max-year-month="2021/10"
        model-value='2021/07/24'></q-date>
     </div>
 
@@ -24,7 +27,7 @@ export default {
     return{
       confirm: false,
       model:"Beijing",
-      options:["shanghai","shenzhen"],
+      options:["Shanghai","Shenzhen","Guangzhou","Tianjing","Harbin","Nanjing","Hefei","Chongqing","Xian","Hangzhou","Beijing"],
       date:'2021/07/24'
     }
   },
