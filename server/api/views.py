@@ -111,7 +111,9 @@ def get_temp(request):
 
 
 @csrf_exempt
-def forecast_Beijing(request):  #北京未来七天温度预测
+def forecast(request):  #北京未来七天温度预测
+    content = json.loads(request.body)
+    city = content('city')
     x = []
     ymin = []
     yavg = []
