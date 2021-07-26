@@ -7,5 +7,5 @@ urlpatterns = [
     path('trial', views.trial),
     path('gettemp', views.get_temp),
     path('forecast', views.forecast),
-    path('Beijing_everyday', views.Beijing_everyday),
+    path('everyday', views.everyday),
 ]

@@ -48,5 +48,19 @@ class Beijing(models.Model):
         db_table = 'Beijing'
 
 
+class Try(models.Model):
+    date = models.CharField(primary_key=True, max_length=45)
+    tmax = models.IntegerField(blank=True, null=True)
+    tavg = models.IntegerField(blank=True, null=True)
+    tmin = models.IntegerField(blank=True, null=True)
+    city = models.CharField(max_length=45, blank=True, null=True)
+    con = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'try'
+
+
+
 
 

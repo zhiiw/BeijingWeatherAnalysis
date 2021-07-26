@@ -5,6 +5,7 @@ from .models import User
 from .models import Rank5
 from .models import Prewholeyear
 from .models import Beijing
+from .models import Try
 
 
 import json
@@ -134,28 +135,46 @@ def forecast(request):  #北京未来七天温度预测
 
 
 @csrf_exempt
-def Beijing_everyday(request):  #北京未来七天温度预测
+def everyday(request):  #北京未来七天温度预测
     if request.method != 'POST':
         dic = {'status': "Failed", 'message': "Wrong Method"}
         return HttpResponse(json.dumps(dic))
 
     content = json.loads(request.body)
     date = content['date']
-    info = Beijing.objects.get(date=date)
-    tmin = info.tmin
-    tavg = info.tavg
-    tmax = info.tmax
-    weather = info.con
+    city = content['city']
 
-    dic = {'status': "Success", 'tmin': tmin, 'tavg': tavg, 'tmax': tmax, 'weather': weather}
+    try:
+        info = Try.objects.get(city=city, date=date)
+        tavg = info.tavg
+        tmin = info.tmin
+        tmax = info.tmax
+        weather = info.con
+    except Try.DoesNotExist:
+        dic = {'status': "Failed", 'message': "No information"}
+        return HttpResponse(json.dumps(dic))
+
+    if tavg > 23:
+        wearing = "T-shirts"
+    elif tavg > 15:
+        wearing = "coats"
+    elif tavg > 8:
+        wearing = "sweaters"
+    else:
+        wearing = "down jacket"
+
+    if weather == "rainy":
+        travel = "Bring an umbrella"
+    elif weather == "cloudy" and 20 < tavg < 28:
+        travel = "very suitable"
+    elif tavg > 32 or tavg < 5:
+        travel = "not very suitable"
+    else:
+        travel = "suitable"
+
+    dic = {'status': "Success", 'tmin': tmin, 'tavg': tavg,
+           'tmax': tmax, 'weather': weather, 'wearing': wearing, 'travel': travel}
 
     return HttpResponse(json.dumps(dic))
 
 
-# @csrf_exempt
-# def send(request):
-#     send_mail('测试', '球球了', '2539496792@qq.com', ['2539496792@qq.com'], fail_silently=False)
-#
-#     dic = {'status': "Success"}
-#
-#     return HttpResponse(json.dumps(dic))
