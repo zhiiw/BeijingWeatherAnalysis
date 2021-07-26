@@ -119,7 +119,6 @@ export default {
 
 <style lang="sass">
   .q-page
-    background: linear-gradient(to right, #c31432, #240b36) /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
   .skyline
     flex: 0 0 100px

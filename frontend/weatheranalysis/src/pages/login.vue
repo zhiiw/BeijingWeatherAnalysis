@@ -59,18 +59,21 @@ export default {
         return
       }
       let _this = this
-      this.$axios.post('http://127.0.0.1:8001/api/login',
+
+      this.$axios.post('http://127.1:8001/api/login',
         {
           username: this.username,
-          password: this.password
+          password: this.password,
         }).then(function (response) {
         let res = response.data
+
         if(res.status !== 'Success') {
           _this.$q.notify({
             type: 'negative',
             message: 'Login error: ' + res.message
           })
         } else {
+          console.log('eeee')
           sessionStorage.setItem('loggedIn', _this.username)
           sessionStorage.setItem('user_id', res.user_id)
           if(res.is_admin === 1)
@@ -90,6 +93,5 @@ export default {
 
 <style>
   .bg-image {
-    background-image: linear-gradient(to right, #c31432, #240b36)
   }
 </style>

@@ -1,47 +1,32 @@
 <template>
   <q-page class="flex flex-center bg-image" style="flex-direction: column">
+    <q-select v-model="model" class="absolute-top-right" :options="options" label="City"></q-select>
     <vue3-chart-js
       :id="doughnutChart.id"
+      ref="chartRef"
       :type="doughnutChart.type"
       :data="doughnutChart.data"
       :options="doughnutChart.options"
-      @before-render="beforeRenderLogic"
     ></vue3-chart-js>
-  </q-page>
 
+    <button @click="updateChart">Update Chart</button>
+  </q-page>
 
 </template>
 
 <script>
+import { ref } from 'vue'
 import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
+import axios from "axios";
+
 export default {
   name: 'App',
   components: {
     Vue3ChartJs,
   },
-  created() {
-    let _this = this
-    /*
-    this.$axios.get('http://127.0.0.1:8000/api/maintainence_count').then(function (response) {
-      let res = response.data
-      console.log(res)
-      _this.Temperature.rows1 = res.x1
-      _this.Temperature.rows2 = res.x2
-      _this.Temperature.rows3 = res.x3
-    })*/
-  },
-  data () {
-    return {
-      data:{},
-      Temperature: {
-        columns: ['time', 'TMin','TMax',"TAvg"],
-        rows1: [],
-        rows2: [],
-        rows3: [],
-      },
-    }
-  },
   setup () {
+    const chartRef = ref(null)
+
     const doughnutChart = {
       id: 'line',
       type: 'line',
@@ -49,7 +34,7 @@ export default {
         labels: ["2021/7/26", "2021/7/27", "2021/7/28", "2021/7/29", "2021/7/30", "2021/7/31", "2021/8/1"],
         datasets: [
           {
-            labels:"Temperatrue Max",
+            label:"Temperatrue Max",
             backgroundColor: [
               '#41B883',
             ],
@@ -59,7 +44,7 @@ export default {
             data: [26, 25, 25, 24, 24, 22, 25]
           },
           {
-            labels:"Temperatrue average",
+            label:"Temperatrue average",
             backgroundColor: [
               '#00D8FF',
             ],
@@ -69,7 +54,7 @@ export default {
             data: [28, 29, 31, 32, 26, 26, 26]
           },
           {
-            labels:"Temperatrue Min",
+            label:"Temperatrue Min",
             backgroundColor: [
               '#E46651',
             ],
@@ -102,21 +87,61 @@ export default {
         }
       }
     }
-    const beforeRenderLogic = (event) => {
-      //...
-      //if(a === b) {
-      //  event.preventDefault()
-      //}
+    const options=["Shanghai","Shenzhen","Guangzhou","Tianjing","Harbin","Nanjing","Hefei","Chongqing","Xian","Hangzhou","Beijing"]
+
+    const updateChart = () => {
+      axios.get('http://127.0.0.1:8001/api/get').then((response)=> {
+        let res = response.data
+        console.log(res)
+        console.log(res.x)
+
+        doughnutChart.data.labels=res.x
+        doughnutChart.data.datasets=[
+          {
+            label:'Temperatrue Max',
+            backgroundColor: [
+              '#41B883',
+            ],
+            borderColor:[
+              '#41B883',
+            ],
+            data: res.ymin
+          },
+          {
+            label:'Temperatrue average',
+            backgroundColor: [
+              '#00D8FF',
+            ],
+            borderColor:[
+              '#00D8FF',
+            ],
+            data: res.yavg
+          },
+          {
+            label:'Temperatrue Min',
+            backgroundColor: [
+              '#E46651',
+            ],
+            borderColor:[
+              '#E46651',
+            ],
+            data: res.ymax
+          }
+        ]
+        console.log(doughnutChart.data.datasets)
+
+      })
+
+      chartRef.value.update(250)
     }
     return {
       doughnutChart,
-      beforeRenderLogic
-    }
+      updateChart,
+      chartRef,
+      options,
+      model: ref("Beijing"),
+
+  }
   },
 }
 </script>
-<style>
-.bg-image {
-  background-color: white
-}
-</style>
