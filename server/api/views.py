@@ -150,10 +150,10 @@ def Beijing_everyday(request):  #北京未来七天温度预测
     return HttpResponse(json.dumps(dic))
 
 
-@csrf_exempt
-def send(request):
-    send_mail('测试', '球球了', '2539496792@qq.com', ['2539496792@qq.com'], fail_silently=False)
-
-    dic = {'status': "Success"}
-
-    return HttpResponse(json.dumps(dic))
+# @csrf_exempt
+# def send(request):
+#     send_mail('测试', '球球了', '2539496792@qq.com', ['2539496792@qq.com'], fail_silently=False)
+#
+#     dic = {'status': "Success"}
+#
+#     return HttpResponse(json.dumps(dic))
