@@ -9,4 +9,5 @@ urlpatterns = [
     path('forecast', views.forecast),
     path('everyday', views.everyday),
     path('send_comment', views.send_comment),
+    path('load_comments', views.load_comments),
 ]

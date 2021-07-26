@@ -7,6 +7,7 @@ from .models import Prewholeyear
 from .models import Beijing
 from .models import Try
 from .models import Comments
+from .models import Temperatures
 
 
 import json
@@ -113,7 +114,7 @@ def get_temp(request):
 
 
 @csrf_exempt
-def forecast(request):  #北京未来七天温度预测
+def forecast(request):  #指定城市未来七天温度预测
     content = json.loads(request.body)
     city = content('city')
     x = []
@@ -136,7 +137,7 @@ def forecast(request):  #北京未来七天温度预测
 
 
 @csrf_exempt
-def everyday(request):  #北京未来七天温度预测
+def everyday(request):  #指定日期指定城市查询天气
     if request.method != 'POST':
         dic = {'status': "Failed", 'message': "Wrong Method"}
         return HttpResponse(json.dumps(dic))
@@ -146,12 +147,12 @@ def everyday(request):  #北京未来七天温度预测
     city = content['city']
 
     try:
-        info = Try.objects.get(city=city, date=date)
+        info = Temperatures.objects.get(city=city, date=date)
         tavg = info.tavg
         tmin = info.tmin
         tmax = info.tmax
         weather = info.con
-    except Try.DoesNotExist:
+    except Temperatures.DoesNotExist:
         dic = {'status': "Failed", 'message': "No information"}
         return HttpResponse(json.dumps(dic))
 
@@ -215,5 +216,29 @@ def send_comment(request):
     newComment = Comments(user_id=user, text=text)
     newComment.save()
     return HttpResponse(json.dumps(dic))
+
+
+@csrf_exempt
+def load_comments(request):
+    comments = Comments.objects.all()
+
+    if comments.count() == 0:
+        dic = {'status': "Failed", 'message': "no comments"}
+        return HttpResponse(json.dumps(dic))
+
+    array = []
+    if comments.count() > 60:
+        sixtyComs = comments.order_by('createTime')[:60]
+        for com in sixtyComs:
+            array.append(com.text)
+    else:
+        for com in comments:
+            array.append(com.text)
+    array.reverse()
+    dic = {'status': "success", 'comments_array': array}
+
+    return HttpResponse(json.dumps(dic))
+
+
 
 

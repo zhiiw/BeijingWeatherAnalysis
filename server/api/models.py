@@ -70,6 +70,22 @@ class Comments(models.Model):
     )
 
 
+class Temperatures(models.Model):
+    index = models.IntegerField(primary_key=True)
+    city = models.CharField(max_length=45, blank=True, null=True)
+    date = models.CharField(max_length=45, blank=True, null=True)
+    tmax = models.IntegerField(blank=True, null=True)
+    tmin = models.IntegerField(blank=True, null=True)
+    tavg = models.IntegerField(blank=True, null=True)
+    prcp = models.FloatField(blank=True, null=True)
+    con = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'temperatures'
+
+
+
 
 
 
