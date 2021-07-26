@@ -6,6 +6,7 @@ from .models import Rank5
 from .models import Prewholeyear
 from .models import Beijing
 from .models import Try
+from .models import Comments
 
 
 import json
@@ -37,8 +38,7 @@ def login(request):
         dic['status'] = "Failed"
         dic['message'] = "Wrong Username"
         return HttpResponse(json.dumps(dic))
-    if password == user.password:
-
+    if check_password(password, user.password):
         dic['status'] = "Success"
         dic['user_id'] = user.id
         print(dic)
@@ -69,7 +69,8 @@ def register(request):
     except User.DoesNotExist:
         dic['status'] = "Success"
         now = datetime.datetime.now()
-        newUser = User(username=username, password=password,
+        encry_password = make_password(password)
+        newUser = User(username=username, password=encry_password,
                        time_created=now, last_login=now)
         newUser.save()
         return HttpResponse(json.dumps(dic))
@@ -175,6 +176,44 @@ def everyday(request):  #北京未来七天温度预测
     dic = {'status': "Success", 'tmin': tmin, 'tavg': tavg,
            'tmax': tmax, 'weather': weather, 'wearing': wearing, 'travel': travel}
 
+    return HttpResponse(json.dumps(dic))
+
+
+@csrf_exempt
+def send_comment(request):
+    dic = {}
+    if request.method != 'POST':
+        dic['status'] = "Failed"
+        dic['message'] = "Wrong Method"
+        return HttpResponse(json.dumps(dic))
+
+    try:
+        post_content = json.loads(request.body)
+        print(post_content['user_id'])
+
+        user_id = int(post_content['user_id'])
+        text = post_content['text']
+        if text == "":
+            dic['status'] = "Failed"
+            dic['message'] = "No Input"
+            return HttpResponse(json.dumps(dic))
+        if len(text) > 60:
+            dic['status'] = "Failed"
+            dic['message'] = "Too long"
+            return HttpResponse(json.dumps(dic))
+        user = User.objects.get(id=user_id)
+    except (KeyError, json.decoder.JSONDecodeError):
+        dic['status'] = "Failed"
+        dic['message'] = "No Input"
+        return HttpResponse(json.dumps(dic))
+    except User.DoesNotExist:
+        dic['status'] = "Failed"
+        dic['message'] = "Wrong User_id"
+        return HttpResponse(json.dumps(dic))
+
+    dic['status'] = "Success"
+    newComment = Comments(user_id=user, text=text)
+    newComment.save()
     return HttpResponse(json.dumps(dic))
 
 

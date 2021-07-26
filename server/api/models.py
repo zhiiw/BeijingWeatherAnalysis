@@ -61,6 +61,15 @@ class Try(models.Model):
         db_table = 'try'
 
 
+class Comments(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    createTime = models.DateTimeField(default=timezone.now())
+    text = models.TextField(max_length=60)
+    user_id = models.ForeignKey(
+        User, on_delete=models.CASCADE
+    )
+
+
 
 
 

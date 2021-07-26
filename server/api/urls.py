@@ -8,4 +8,5 @@ urlpatterns = [
     path('gettemp', views.get_temp),
     path('forecast', views.forecast),
     path('everyday', views.everyday),
+    path('send_comment', views.send_comment),
 ]
