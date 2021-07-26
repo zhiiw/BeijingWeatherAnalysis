@@ -5,6 +5,7 @@ from .models import User
 from .models import Rank5
 from .models import Prewholeyear
 from .models import Beijing
+
 from django.core.mail import send_mail
 
 import json
