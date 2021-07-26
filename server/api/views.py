@@ -116,7 +116,7 @@ def get_temp(request):
 @csrf_exempt
 def forecast(request):  #指定城市未来七天温度预测
     content = json.loads(request.body)
-    city = content('city')
+    city = content['city']
     x = []
     ymin = []
     yavg = []
@@ -125,7 +125,7 @@ def forecast(request):  #指定城市未来七天温度预测
     for i in range(1, 8, 1):
         d = (now + timedelta(days=i))
         day_text = ("%s/%s/%s" % (d.year, d.month, d.day))
-        info = Beijing.objects.get(date=day_text)
+        info = Temperatures.objects.get(city=city, date=day_text)
         x.append(info.date)
         ymin.append(info.tmin)
         yavg.append(info.tavg)
