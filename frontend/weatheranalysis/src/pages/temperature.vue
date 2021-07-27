@@ -1,122 +1,91 @@
 <template>
-  <q-page class="flex flex-center bg-image" style="flex-direction: column">
-    <vue3-chart-js
-      :id="doughnutChart.id"
-      :type="doughnutChart.type"
-      :data="doughnutChart.data"
-      :options="doughnutChart.options"
-      @before-render="beforeRenderLogic"
-    ></vue3-chart-js>
+  <q-page class="flex bg-image flex-center">
+    <q-input
+      filled
+      v-model="username"
+      label="danmu"
+      lazy-rules
+      :rules="[ val => val && val.length > 0 || 'Please type your danmu']"
+    />
+    <q-btn label="Send" @click="onSend" color="primary"/>
+
+    <div id='container'></div>
+
+
   </q-page>
 
-
 </template>
-
 <script>
-import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
+import easyDanmaku from 'easy-danmaku-js';
+
+let Danmaku;
 export default {
-  name: 'App',
-  components: {
-    Vue3ChartJs,
+  //~~~
+
+  data(){
+    return{
+      Danmaku,
+      username:'',
+      danmus:[]
+    }
+
   },
-  created() {
-    let _this = this
-    /*
-    this.$axios.get('http://127.0.0.1:8000/api/maintainence_count').then(function (response) {
+  mounted() {
+    Danmaku = new easyDanmaku({
+      el:'#container',                        //弹幕挂载节点
+      line:10,
+      colourful:true,//弹幕行数
+      wrapperStyle:'danmaku-wrapper',         //默认弹幕样式
+      speed:5,                                //弹幕播放速度
+      runtime:3,                              //播放一次的时常
+      loop:true,                              //开启循环播放
+      hover:true,                             //鼠标移入悬停
+      onComplete:()=> {                       //播放结束
+        console.log('end');
+      },                                      //hover时 参数为该悬停元素
+      onHover:(dom) => {
+        console.log(dom);
+      }
+    })
+    this.$axios.get(`http://192.168.43.78:8001/api/load_comments`).then(response=>{
       let res = response.data
       console.log(res)
-      _this.Temperature.rows1 = res.x1
-      _this.Temperature.rows2 = res.x2
-      _this.Temperature.rows3 = res.x3
-    })*/
+      this.danmus=res.comments_array
+      Danmaku.batchSend(this.danmus)
+
+    })
+    const data = ['danmaku1','danmaku2','danmaku3','danmaku4','danmaku5','danmaku6']
   },
-  data () {
-    return {
-      data:{},
-      Temperature: {
-        columns: ['time', 'TMin','TMax',"TAvg"],
-        rows1: [],
-        rows2: [],
-        rows3: [],
-      },
-    }
-  },
-  setup () {
-    const doughnutChart = {
-      id: 'line',
-      type: 'line',
-      data: {
-        labels: ["2021/7/26", "2021/7/27", "2021/7/28", "2021/7/29", "2021/7/30", "2021/7/31", "2021/8/1"],
-        datasets: [
-          {
-            labels:"Temperatrue Max",
-            backgroundColor: [
-              '#41B883',
-            ],
-            borderColor:[
-              '#41B883',
-            ],
-            data: [26, 25, 25, 24, 24, 22, 25]
-          },
-          {
-            labels:"Temperatrue average",
-            backgroundColor: [
-              '#00D8FF',
-            ],
-            borderColor:[
-              '#00D8FF',
-            ],
-            data: [28, 29, 31, 32, 26, 26, 26]
-          },
-          {
-            labels:"Temperatrue Min",
-            backgroundColor: [
-              '#E46651',
-            ],
-            borderColor:[
-              '#E46651',
-            ],
-            data: [31, 32, 36, 37, 31, 27, 31]
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        interaction: {
-          mode: 'index',
-          intersect: false,
-        },
-        stacked: false,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Weather Analysis'
-          }
-        },
-        scales: {
-          y: {
-            type: 'linear',
-            display: true,
-            position: 'left',
-          },
+  methods:{
+    onSend(){
+      Danmaku.send(
+        "<h5>"+"<u>"+this.username+"</u>"+"</h5>",'danmaku-wrapper',(e)=>{
         }
+      )
+      this.$axios.post(`http://192.168.43.78:8001/api/send_comment`,
+        {
+          user_id:sessionStorage.getItem('user_id'),
+          text:this.username
+        }).then(response=>{
+        })
+
       }
-    }
-    const beforeRenderLogic = (event) => {
-      //...
-      //if(a === b) {
-      //  event.preventDefault()
-      //}
-    }
-    return {
-      doughnutChart,
-      beforeRenderLogic
-    }
-  },
-}
+  }
+  // ~~~
+};
 </script>
 <style>
-.bg-image {
-  background-color: white
+#container{
+  width:600px;
+  height:400px;
+  margin:0 auto;
+}
+.danmaku-wrapper{
+  background: white;
+  border-radius: 8px;
+}
+.danmaku1-wrapper{
+  background: lightgreen;
+  border-radius: 8px;
 }
 </style>

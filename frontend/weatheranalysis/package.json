@@ -15,9 +15,12 @@
     "axios": "^0.21.1",
     "chart.js": "^3.4.1",
     "core-js": "^3.6.5",
+    "easy-danmaku-js": "^1.0.7",
     "echarts": "4.9.0",
     "quasar": "^2.0.0",
+    "timers": "^0.1.1",
     "v-charts": "^1.19.0",
+    "vue-baberrage": "^3.2.4",
     "vue-echarts-v3": "^2.0.1"
   },
   "devDependencies": {

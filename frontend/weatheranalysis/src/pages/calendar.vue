@@ -10,6 +10,7 @@
           class="fa-1x"
           navigation-min-year-month="2021/07"
           navigation-max-year-month="2021/10"
+          @click="trunToIndex"
           model-value='2021/07/24'></q-date>
       </div>
     </div>
@@ -33,25 +34,34 @@ export default {
         title: 'Jump?',
         message: 'Are you sure to turn to this page'
       }).onOk(() => {
-        this.$axios.post('http://127.0.0.1:8001/api/login',//from here get the value
+        this.$axios.post('http://192.168.43.78:8001/api/everyday',//from here get the value
           {
-            username: this.username,
-            password: this.password,
+            city: this.model.toUpperCase(),
+            date: this.date,
           }).then(function (response) {
           let res = response.data
-          sessionStorage.setItem('loggedIn', _this.username)
-          sessionStorage.setItem('user_id', res.user_id)
-          this.$router.push('/index')
+          console.log(res)
+          sessionStorage.setItem('tmin', res.tmin)
+          sessionStorage.setItem('tmax', res.tmax)
+          sessionStorage.setItem('tavg', res.tavg)
+          sessionStorage.setItem('wearing', res.wearing)
+          sessionStorage.setItem('weather', res.weather)
+          sessionStorage.setItem('travel', res.weather)
+          sessionStorage.setItem('city', res.city)
+          sessionStorage.setItem('date', res.date)
+          _this.$router.push('/index')
+
         }).catch(function (error) {
           console.log(error)
         })
-        this.routes.push("/index")
       }).onCancel(() => {
-
+        return
       }).onDismiss(() => {
-
+        return
       })
+
     }
+
   }
 }
 </script>
