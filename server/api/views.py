@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from .models import User
 from .models import Comment
 from .models import Temperatures
+from .models import Windnhumid
 
 
 import json
@@ -119,9 +120,24 @@ def everyday(request):  #指定日期指定城市查询天气
         tmin = info.tmin
         tmax = info.tmax
         weather = info.con
+        extra = Windnhumid.objects.get(city=city, date=day_text)
+        wind = extra.wind
+        humid = extra.humid
     except Temperatures.DoesNotExist:
         dic = {'status': "Failed", 'message': "No information"}
         return HttpResponse(json.dumps(dic))
+    except Windnhumid.DoesNotExist:
+        dic = {'status': "Failed", 'message': "No information"}
+        return HttpResponse(json.dumps(dic))
+
+    if weather == "rainy" and humid+15 <= 90:
+        humid = humid + 15
+
+    if weather == "cloudy" and humid+5 <= 90:
+        humid = humid + 5
+
+    if weather == "sunny" and humid-10 >= 5:
+        humid = humid - 10
 
     if tavg > 23:
         wearing = "T-shirts"
@@ -134,16 +150,16 @@ def everyday(request):  #指定日期指定城市查询天气
 
     if weather == "rainy":
         travel = "Bring an umbrella"
-    elif weather == "cloudy" and 20 < tavg < 28:
+    elif weather == "cloudy" and 20 < tavg < 28 and wind < 8 and 30 < humid < 80:
         travel = "very suitable"
-    elif tavg > 32 or tavg < 5:
+    elif tavg > 32 or tavg < 5 or wind >= 8 or humid <= 30 or humid >= 80:
         travel = "not very suitable"
     else:
         travel = "suitable"
 
     dic = {'status': "Success", 'tmin': tmin, 'tavg': tavg,
            'tmax': tmax, 'weather': weather, 'wearing': wearing,
-           'travel': travel, 'city': city, 'date': date}
+           'travel': travel, 'city': city, 'date': date, 'windspeed': wind, 'RH': humid}
 
     return HttpResponse(json.dumps(dic))
 

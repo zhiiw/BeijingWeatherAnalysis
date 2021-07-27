@@ -42,6 +42,18 @@ class Temperatures(models.Model):
         db_table = 'temperatures'
 
 
+class Windnhumid(models.Model):
+    id = models.IntegerField(primary_key=True)
+    date = models.CharField(max_length=45, blank=True, null=True)
+    wind = models.FloatField(blank=True, null=True)
+    humid = models.IntegerField(blank=True, null=True)
+    city = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'windNhumid'
+
+
 
 
 
