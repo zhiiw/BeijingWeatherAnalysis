@@ -2,10 +2,6 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import User
-from .models import Rank5
-from .models import Prewholeyear
-from .models import Beijing
-from .models import Try
 from .models import Comments
 from .models import Temperatures
 
@@ -79,38 +75,6 @@ def register(request):
         dic['status'] = "Failed"
         dic['message'] = "User exist"
         return HttpResponse(json.dumps(dic))
-
-
-@csrf_exempt
-def trial(request):
-    now = datetime.datetime.now().__format__('%Y/%m/%d')
-    Rank5.objects.filter(name=now).delete()
-    return HttpResponse('OK')
-
-
-@csrf_exempt
-def get_temp(request):
-    if request.method != 'POST':
-        dic = {'status': "Failed", 'message': "Wrong Method"}
-        return HttpResponse(json.dumps(dic))
-
-    x = []
-    ymin = []
-    yavg = []
-    ymax = []
-    now = datetime.datetime.now()
-    for i in range(1, 8, 1):
-        d = (now + timedelta(days=i))
-        day_text = ("%s/%s/%s" % (d.day, d.month, d.year))
-        info = Prewholeyear.objects.get(date=day_text)
-        x.append(info.date)
-        ymin.append(info.tmin)
-        yavg.append(info.tavg)
-        ymax.append(info.tmax)
-
-    dic = {'status': "Success", 'x': x, 'ymin': ymin, 'yavg': yavg, 'ymax': ymax}
-
-    return HttpResponse(json.dumps(dic))
 
 
 @csrf_exempt
