@@ -2,7 +2,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import User
-from .models import Comments
+from .models import Comment
 from .models import Temperatures
 
 
@@ -81,6 +81,7 @@ def register(request):
 def forecast(request):  #指定城市未来七天温度预测
     content = json.loads(request.body)
     city = content['city']
+    print(city)
     x = []
     ymin = []
     yavg = []
@@ -89,6 +90,7 @@ def forecast(request):  #指定城市未来七天温度预测
     for i in range(1, 8, 1):
         d = (now + timedelta(days=i))
         day_text = ("%s/%s/%s" % (d.year, d.month, d.day))
+        print(day_text)
         info = Temperatures.objects.get(city=city, date=day_text)
         x.append(info.date)
         ymin.append(info.tmin)
@@ -105,9 +107,14 @@ def everyday(request):  #指定日期指定城市查询天气
     content = json.loads(request.body)
     date = content['date']
     city = content['city']
+    print(date)
+    print(city)
+    d = datetime.datetime.strptime(date, "%Y/%m/%d")
+    day_text = ("%s/%s/%s" % (d.year, d.month, d.day))
+    print(day_text)
 
     try:
-        info = Temperatures.objects.get(city=city, date=date)
+        info = Temperatures.objects.get(city=city, date=day_text)
         tavg = info.tavg
         tmin = info.tmin
         tmax = info.tmax
@@ -135,7 +142,8 @@ def everyday(request):  #指定日期指定城市查询天气
         travel = "suitable"
 
     dic = {'status': "Success", 'tmin': tmin, 'tavg': tavg,
-           'tmax': tmax, 'weather': weather, 'wearing': wearing, 'travel': travel}
+           'tmax': tmax, 'weather': weather, 'wearing': wearing,
+           'travel': travel, 'city': city, 'date': date}
 
     return HttpResponse(json.dumps(dic))
 
@@ -173,14 +181,14 @@ def send_comment(request):
         return HttpResponse(json.dumps(dic))
 
     dic['status'] = "Success"
-    newComment = Comments(user_id=user, text=text)
+    newComment = Comment(user_id=user, text=text)
     newComment.save()
     return HttpResponse(json.dumps(dic))
 
 
 @csrf_exempt
 def load_comments(request):
-    comments = Comments.objects.all()
+    comments = Comment.objects.all()
 
     if comments.count() == 0:
         dic = {'status': "Failed", 'message': "no comments"}

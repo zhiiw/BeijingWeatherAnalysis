@@ -15,13 +15,16 @@ class User(models.Model):
         return self.username
 
 
-class Comments(models.Model):
+class Comment(models.Model):
     id = models.BigAutoField(primary_key=True)
     createTime = models.DateTimeField(default=timezone.now())
     text = models.TextField(max_length=60)
     user_id = models.ForeignKey(
         User, on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return self.text
 
 
 class Temperatures(models.Model):
