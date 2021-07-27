@@ -93,5 +93,7 @@ export default {
 
 <style>
   .bg-image {
+    background-image: linear-gradient(to right, #c31432, #240b36)
+
   }
 </style>

@@ -61,7 +61,8 @@
       ></vue3-chart-js>
     </q-card>
 
-    <button @click="updateChart();updateVal();">Update Chart</button>
+    <button @click="updateChart(this.model);updateChart(this.model);updateChart(this.model);updateChart(this.model);updateChart(this.model);/*updateChart(this.model);updateVal();*/">Update Chart</button>
+
   </q-page>
 
 </template>
@@ -159,20 +160,23 @@ export default {
         }
       }
     }
-    const options=["Shanghai","Shenzhen","Guangzhou","Tianjing","Harbin","Nanjing","Hefei","Chongqing","Xian","Hangzhou","Beijing"]
-    const updateChart = () => {
+    const options=["Shanghai","Guangzhou","Tianjin","Harbin","Nanjing","Hefei","Chongqing","Xian","Hangzhou","Beijing"]
+    const updateChart = (model) => {
 
       axios.post('http://192.168.43.78:8001/api/forecast',{
-        city:"Shanghai"
+        city:model.toUpperCase()
       }).then((response)=> {
+        console.log(model)
         let res = response.data
         console.log(res)
-        console.log(res.x)
+        console.log(res.ymin)
+        console.log(res.yavg)
+        console.log(res.ymax)
+        /*
         const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
         doughnutChart.avg=average(res.yavg)
         doughnutChart.max=average(res.ymax)
-        doughnutChart.min=average(res.ymin)
-        console.log("the min is "+doughnutChart.min)
+        doughnutChart.min=average(res.ymin)*/
 
         doughnutChart.data.labels=res.x
         doughnutChart.data.datasets=[
@@ -184,7 +188,7 @@ export default {
             borderColor:[
               '#41B883',
             ],
-            data: res.ymin
+            data: res.ymax
           },
           {
             label:'Temperatrue average',
@@ -204,7 +208,7 @@ export default {
             borderColor:[
               '#E46651',
             ],
-            data: res.ymax
+            data: res.ymin
           }
         ]
         console.log(doughnutChart.data.datasets)

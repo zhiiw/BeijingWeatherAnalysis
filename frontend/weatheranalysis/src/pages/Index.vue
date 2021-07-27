@@ -12,21 +12,28 @@
     </div>
     <template v-if="true">
       <div class="col text-white text-center">
-        <div class="text-h4 text-weight-light">
+        <div class="text-h3 text-weight-light">
           {{ city }}
         </div>
-        <div class="text-h6 text-weight-light">
+        <br>
+        <div class="text-h4 text-weight-light">
           {{ weatehr }}
         </div>
         <br>
-        <div class="text-h1 text-weight-light">
-          {{ Math.round(tmin) }}&deg;C/ {{ Math.round(tavg) }}&deg;C/{{ Math.round(tmax) }}&deg;C
+        <div class="text-h2 text-weight-light">
+          {{ Math.round(tmin) }}&deg;C / {{ Math.round(tmax) }}&deg;C
         </div>
         <div class="col text-center">
           <img :src="`https://openweathermap.org/img/wn/${icon }@2x.png`">
         </div>
         <div class="text-h6 text-weight-light">
           Wind Speed:1
+        </div>
+        <div class="text-h6 text-weight-light">
+          Cloths: {{wearing}}
+        </div>
+        <div class="text-h6 text-weight-light">
+          Travel: {{travel}}
         </div>
 
       </div>
@@ -142,6 +149,7 @@ export default {
 
 <style lang="sass">
   .q-page
+    background-image: linear-gradient(to right, #c31432, #240b36)
 
   .skyline
     flex: 0 0 100px
