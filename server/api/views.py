@@ -102,10 +102,6 @@ def forecast(request):  #指定城市未来七天温度预测
 
 @csrf_exempt
 def everyday(request):  #指定日期指定城市查询天气
-    if request.method != 'POST':
-        dic = {'status': "Failed", 'message': "Wrong Method"}
-        return HttpResponse(json.dumps(dic))
-
     content = json.loads(request.body)
     date = content['date']
     city = content['city']
