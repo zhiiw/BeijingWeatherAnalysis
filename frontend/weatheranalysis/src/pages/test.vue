@@ -1,15 +1,68 @@
 <template>
-  <q-page class="flex flex-center bg-image" style="flex-direction: column">
-    <q-select v-model="model" class="absolute-top-right" :options="options" label="City"></q-select>
-    <vue3-chart-js
-      :id="doughnutChart.id"
-      ref="chartRef"
-      :type="doughnutChart.type"
-      :data="doughnutChart.data"
-      :options="doughnutChart.options"
-    ></vue3-chart-js>
+  <q-page class="q-pa-sm bg-image" style="flex-direction: column">
+    <q-card class="q-mt-sm">
+      <q-card-section class="text-h6 q-pb-none">
+        <q-item>
+          <q-item-section avatar class="">
+            <q-icon color="blue" name="fas fa-chart-line" size="44px" />
+          </q-item-section>
 
-    <button @click="updateChart">Update Chart</button>
+          <q-item-section>
+            <div class="text-h6">Weather Charts</div>
+          </q-item-section>
+        </q-item>
+        <div class="row">
+        <div class="col-lg-3 col-md-3 col-xs-3 col-sm-3">
+          <q-item>
+            <q-item-section top avatar>
+              <q-avatar color="blue" text-color="white" icon="thermostat" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label class="text-h6 text-blue text-bold">{{ max }}</q-item-label>
+              <q-item-label caption>Fashions</q-item-label>
+            </q-item-section>
+          </q-item>
+        </div>
+
+
+
+        <div class="col-lg-3 col-md-3 col-xs-3 col-sm-3">
+          <q-item>
+            <q-item-section top avatar>
+              <q-avatar color="green-6" text-color="white" icon="bluetooth" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label class="text-h6 text-green-6 text-bold">{{avg}}</q-item-label>
+              <q-item-label caption>Toys</q-item-label>
+            </q-item-section>
+          </q-item>
+        </div>
+        <div class="col-lg-3 col-md-3 col-xs-3 col-sm-3">
+          <q-item>
+            <q-item-section top avatar>
+              <q-avatar color="orange-8" text-color="white" icon="ac_unit" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label class="text-h6 text-orange-8 text-bold">{{ min }}</q-item-label>
+              <q-item-label caption>Vouchers</q-item-label>
+            </q-item-section>
+          </q-item>
+        </div>
+
+        </div>
+      </q-card-section>
+      <q-select v-model="model" class="absolute-top-right" :options="options" label="City"></q-select>
+      <vue3-chart-js
+        :id="doughnutChart.id"
+        ref="chartRef"
+        :type="doughnutChart.type"
+        :data="doughnutChart.data"
+        :options="doughnutChart.options"
+      ></vue3-chart-js>
+    </q-card>
+
+    <button @click="updateChart(this.model);updateChart(this.model);updateChart(this.model);updateChart(this.model);updateChart(this.model);/*updateChart(this.model);updateVal();*/">Update Chart</button>
+
   </q-page>
 
 </template>
@@ -24,14 +77,34 @@ export default {
   components: {
     Vue3ChartJs,
   },
+  data(){
+    return{
+      avg:28.2,
+      max :32.1,
+      min:24.1,
+    }
+  },
+  methods:{
+    updateVal(){
+        const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+        this.avg=this.doughnutChart.avg.toFixed(1)
+        this.max=this.doughnutChart.max.toFixed(1)
+        this.min=this.doughnutChart.min.toFixed(1)
+
+    }
+  },
   setup () {
     const chartRef = ref(null)
 
+    const model="Beijing"
     const doughnutChart = {
       id: 'line',
       type: 'line',
+      avg:24.4,
+      max:28.2,
+      min:32.1,
       data: {
-        labels: ["2021/7/26", "2021/7/27", "2021/7/28", "2021/7/29", "2021/7/30", "2021/7/31", "2021/8/1"],
+        labels: ["2021/26", "2021/7/27", "2021/7/28", "2021/7/29", "2021/7/30", "2021/7/31", "2021/8/1"],
         datasets: [
           {
             label:"Temperatrue Max",
@@ -87,13 +160,23 @@ export default {
         }
       }
     }
-    const options=["Shanghai","Shenzhen","Guangzhou","Tianjing","Harbin","Nanjing","Hefei","Chongqing","Xian","Hangzhou","Beijing"]
+    const options=["Shanghai","Guangzhou","Tianjin","Harbin","Nanjing","Hefei","Chongqing","Xian","Hangzhou","Beijing"]
+    const updateChart = (model) => {
 
-    const updateChart = () => {
-      axios.get('http://127.0.0.1:8001/api/get').then((response)=> {
+      axios.post('http://192.168.43.78:8001/api/forecast',{
+        city:model.toUpperCase()
+      }).then((response)=> {
+        console.log(model)
         let res = response.data
         console.log(res)
-        console.log(res.x)
+        console.log(res.ymin)
+        console.log(res.yavg)
+        console.log(res.ymax)
+        /*
+        const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+        doughnutChart.avg=average(res.yavg)
+        doughnutChart.max=average(res.ymax)
+        doughnutChart.min=average(res.ymin)*/
 
         doughnutChart.data.labels=res.x
         doughnutChart.data.datasets=[
@@ -105,7 +188,7 @@ export default {
             borderColor:[
               '#41B883',
             ],
-            data: res.ymin
+            data: res.ymax
           },
           {
             label:'Temperatrue average',
@@ -125,7 +208,7 @@ export default {
             borderColor:[
               '#E46651',
             ],
-            data: res.ymax
+            data: res.ymin
           }
         ]
         console.log(doughnutChart.data.datasets)
@@ -134,7 +217,9 @@ export default {
 
       chartRef.value.update(250)
     }
+
     return {
+
       doughnutChart,
       updateChart,
       chartRef,

@@ -26,7 +26,9 @@ export default {
   created () {
     let _this=this
 
-    this.$axios.get('http://127.0.0.1:8001/api/get').then((response)=> {
+    this.$axios.post('http://192.168.43.78:8001/api/forecast',{
+      city:this.model
+    }).then((response)=> {
       let res = response.data
       console.log(res)
       console.log(res.x)
