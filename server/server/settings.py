@@ -138,4 +138,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 指定simpleui默认的主题,指定一个文件名，相对路径就从simpleui的theme目录读取
 SIMPLEUI_DEFAULT_THEME = 'e-blue-pro.css'
 
-SIMPLEUI_LOGO = 'https://img04.sogoucdn.com/app/a/100520146/4738e06f01ae66c4fd98c75f97a0824e'
+SIMPLEUI_LOGO = 'https://ftp.bmp.ovh/imgs/2021/07/01ae66c4fd98c75f.png'
