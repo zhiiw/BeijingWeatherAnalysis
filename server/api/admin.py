@@ -8,7 +8,7 @@ class UserAdmin(admin.ModelAdmin):
     # 指定后台网页要显示的字段
     list_display = ["username", "last_login"]
     list_per_page = 8 #一页显示多少条
-    search_fields = ['username'] #过滤器
+    search_fields = ['username'] #搜索框
 
 
 class CommentAdmin(admin.ModelAdmin):

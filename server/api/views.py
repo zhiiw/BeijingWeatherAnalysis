@@ -90,7 +90,6 @@ def forecast(request):  #指定城市未来七天温度预测
     for i in range(1, 8, 1):
         d = (now + timedelta(days=i))
         day_text = ("%s/%s/%s" % (d.year, d.month, d.day))
-        print(day_text)
         info = Temperatures.objects.get(city=city, date=day_text)
         x.append(info.date)
         ymin.append(info.tmin)
