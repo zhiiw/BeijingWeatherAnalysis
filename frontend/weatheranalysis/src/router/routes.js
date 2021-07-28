@@ -9,8 +9,10 @@ const routes = [
       { path: '/about', component: () => import('pages/About.vue')},
       { path: '/login', component: () => import('pages/login.vue')},
       { path: '/reg', component: () => import('pages/reg.vue')},
-      { path: '/temperature', component: () => import('pages/calendar.vue')},
-      { path: '/wind', component: () => import('pages/test.vue')},
+      { path: '/temperature', component: () => import('pages/test.vue')},
+      { path: '/wind', component: () => import('pages/lstm-analysis.vue')},
+      { path: '/cal', component: () => import('pages/calendar.vue')},
+
 
 
 

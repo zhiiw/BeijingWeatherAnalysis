@@ -1,14 +1,7 @@
 <template>
   <q-page class="flex column" :class="bgclass">
     <div class="col q-pt-lg q-px-md">
-      <q-input bottom-slots v-model="search" placeholder="Location" v-on:keyup.enter="searchWeather" dark borderless>
-        <template v-slot:prepend >
-          <q-icon name="place" />
-        </template>
-        <template v-slot:append>
-          <q-icon name="close" @click="text = ''" class="cursor-pointer" />
-        </template>
-      </q-input>
+
     </div>
     <template v-if="true">
       <div class="col text-white text-center">
@@ -27,7 +20,10 @@
           <img :src="`https://openweathermap.org/img/wn/${icon }@2x.png`">
         </div>
         <div class="text-h6 text-weight-light">
-          Wind Speed:1
+          Wind Speed: {{windspeed}} m/s
+        </div>
+        <div class="text-h6 text-weight-light">
+          RH: {{RH}} %
         </div>
         <div class="text-h6 text-weight-light">
           Cloths: {{wearing}}
@@ -35,6 +31,15 @@
         <div class="text-h6 text-weight-light">
           Travel: {{travel}}
         </div>
+
+        <q-page-sticky position="bottom-right" :offset="[18, 18]">
+          <q-fab
+            icon="keyboard_arrow_right"
+            @click="toCal"
+            color="accent"
+          >
+          </q-fab>
+        </q-page-sticky>
 
       </div>
     </template>
@@ -59,6 +64,8 @@ export default {
       tavg:0,
       weatehr:'',
       city:'',
+      windspeed:0,
+      RH:0,
       date:'',
       wearing:'',
       travel:'',
@@ -98,6 +105,9 @@ export default {
     this.tmin=sessionStorage.getItem('tmin')
     this.tmax=sessionStorage.getItem('tmax')
     this.tavg=sessionStorage.getItem('tavg')
+    this.windspeed=sessionStorage.getItem('windspeed')
+    this.RH=sessionStorage.getItem('RH')
+
     this.weatehr=sessionStorage.getItem('weather')
     if (this.weatehr==="sunny"){
       this.icon="01d"
@@ -113,6 +123,8 @@ export default {
 
   },
   mounted() {
+    this.$q.loading.hide()
+
     let _this = this
     /*this.$axios.get('http://192.168.43.78:8001/api/random').then(function (response) {
       console.log(response)
@@ -124,6 +136,10 @@ export default {
     })*/
   },
   methods: {
+    toCal(){
+      this.$router.push("/Cal")
+      this.$q.loading.show()
+    },
     goRandom() {
       //this.$router.push({name: 'info', params: {id: this.random_house_id}})
     },
@@ -143,7 +159,8 @@ export default {
         }
         })
       }
-    }
+    },
+
 }
 </script>
 

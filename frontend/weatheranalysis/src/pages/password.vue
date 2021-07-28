@@ -11,7 +11,7 @@
         <q-input
           filled
           v-model="username"
-          label="Your username *"
+          label="Your password *"
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type your username']"
         />
@@ -20,7 +20,7 @@
           filled
           type="password"
           v-model="password"
-          label="Your password *"
+          label="Your ensure your password *"
 
           lazy-rules
           :rules="[
@@ -28,7 +28,6 @@
           ]"
         />
 
-        <q-toggle v-model="accept" label="I accept the license and terms" />
 
         <div class="text-center">
           <q-btn label="Login" type="submit" color="primary"/>
@@ -44,7 +43,7 @@ export default {
   name: "Login",
   data() {
     return {
-      accept: false,
+      accept: true,
       username: '',
       password: ''
     }
@@ -58,11 +57,16 @@ export default {
         })
         return
       }
+      if (this.username!==this.password){
+        this.$q.notify({
+          type: 'warning',
+          message: 'Please make sure your password the same'
+        })
+      }
       let _this = this
 
-      this.$axios.post('http://192.168.43.78:8001/api/login',
+      this.$axios.post('http://192.168.43.78:8001/api/pa',
         {
-          username: this.username,
           password: this.password,
         }).then(function (response) {
         let res = response.data
@@ -73,12 +77,7 @@ export default {
             message: 'Login error: ' + res.message
           })
         } else {
-          console.log('eeee')
-          sessionStorage.setItem('loggedIn', _this.username)
-          sessionStorage.setItem('user_id', res.user_id)
-          if(res.is_admin === 1)
-            sessionStorage.setItem('role', '1')
-          _this.$router.push('/cal')
+
         }
       }).catch(function (error) {
         console.log(error)
@@ -92,8 +91,8 @@ export default {
 </script>
 
 <style>
-  .bg-image {
-    background-image: linear-gradient(to right, #c31432, #240b36)
+.bg-image {
+  background-image: linear-gradient(to right, #c31432, #240b36)
 
-  }
+}
 </style>

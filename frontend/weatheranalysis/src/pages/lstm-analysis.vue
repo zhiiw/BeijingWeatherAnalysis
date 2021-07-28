@@ -8,18 +8,17 @@
           </q-item-section>
 
           <q-item-section>
-            <div class="text-h6">Weather Charts</div>
+            <div class="text-h6">Weather Charts(LSTM)</div>
           </q-item-section>
         </q-item>
-
       </q-card-section>
       <div class="absolute-top-right">
 
         <q-select v-model="model" :options="options" label="City"></q-select>
         <q-btn label="Update" @click="updateChart(this.model)" color="primary"/>
 
-
       </div>
+
       <vue3-chart-js
         :id="doughnutChart.id"
         ref="chartRef"
@@ -29,7 +28,6 @@
       ></vue3-chart-js>
     </q-card>
     <br><br>
-
     <div id='container'></div>
     <div class="row">
 
@@ -43,6 +41,7 @@
 
     </div>
     <q-btn label="Send" @click="onSend" color="primary"/>
+
 
   </q-page>
 
@@ -100,12 +99,13 @@ export default {
   },
   methods:{
     updateVal(){
-        const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
-        this.avg=this.doughnutChart.avg.toFixed(1)
-        this.max=this.doughnutChart.max.toFixed(1)
-        this.min=this.doughnutChart.min.toFixed(1)
+      const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+      this.avg=this.doughnutChart.avg.toFixed(1)
+      this.max=this.doughnutChart.max.toFixed(1)
+      this.min=this.doughnutChart.min.toFixed(1)
 
     },
+
     onSend(){
       Danmaku.send(
         "<h5>"+"<u>"+this.username+"</u>"+"</h5>",'danmaku-wrapper',(e)=>{
@@ -126,24 +126,14 @@ export default {
 
     const model="Beijing"
     const doughnutChart = {
-      id: 'line',
-      type: 'line',
+      id: 'bar',
+      type: 'bar',
       avg:24.4,
       max:28.2,
       min:32.1,
       data: {
         labels: ["2021/26", "2021/7/27", "2021/7/28", "2021/7/29", "2021/7/30", "2021/7/31", "2021/8/1"],
         datasets: [
-          {
-            label:"Temperatrue Max",
-            backgroundColor: [
-              '#41B883',
-            ],
-            borderColor:[
-              '#41B883',
-            ],
-            data: [26, 25, 25, 24, 24, 22, 25]
-          },
           {
             label:"Temperatrue average",
             backgroundColor: [
@@ -154,16 +144,7 @@ export default {
             ],
             data: [28, 29, 31, 32, 26, 26, 26]
           },
-          {
-            label:"Temperatrue Min",
-            backgroundColor: [
-              '#E46651',
-            ],
-            borderColor:[
-              '#E46651',
-            ],
-            data: [31, 32, 36, 37, 31, 27, 31]
-          }
+
         ]
       },
       options: {
@@ -176,7 +157,7 @@ export default {
         plugins: {
           title: {
             display: true,
-            text: 'Weather Analysis'
+            text: 'Weather Analysis(LSTM)'
           }
         },
         scales: {
@@ -191,15 +172,14 @@ export default {
     const options=["Shanghai","Guangzhou","Tianjin","Harbin","Nanjing","Hefei","Chongqing","Xian","Hangzhou","Beijing"]
     const updateChart = (model) => {
 
-      axios.post('http://192.168.43.78:8001/api/forecast',{
+      axios.post('http://192.168.43.78:8001/api/lstm',{
         city:model.toUpperCase()
       }).then((response)=> {
         console.log(model)
         let res = response.data
         console.log(res)
-        console.log(res.ymin)
-        console.log(res.yavg)
-        console.log(res.ymax)
+        console.log(res.y)
+
         /*
         const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
         doughnutChart.avg=average(res.yavg)
@@ -209,16 +189,6 @@ export default {
         doughnutChart.data.labels=res.x
         doughnutChart.data.datasets=[
           {
-            label:'Temperatrue Max',
-            backgroundColor: [
-              '#41B883',
-            ],
-            borderColor:[
-              '#41B883',
-            ],
-            data: res.ymax
-          },
-          {
             label:'Temperatrue average',
             backgroundColor: [
               '#00D8FF',
@@ -226,17 +196,7 @@ export default {
             borderColor:[
               '#00D8FF',
             ],
-            data: res.yavg
-          },
-          {
-            label:'Temperatrue Min',
-            backgroundColor: [
-              '#E46651',
-            ],
-            borderColor:[
-              '#E46651',
-            ],
-            data: res.ymin
+            data: res.y
           }
         ]
         console.log(doughnutChart.data.datasets)
@@ -254,7 +214,7 @@ export default {
       options,
       model: ref("Beijing"),
 
-  }
+    }
   },
 }
 </script>

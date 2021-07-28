@@ -23,17 +23,17 @@
       content-class="bg-primary text-white"
     >
       <q-list>
-        <q-item to="/index" active-class="q-item-no-link-highlighting">
+        <q-item to="/cal" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
             <q-icon name="dashboard"/>
           </q-item-section>
           <q-item-section>
-            <q-item-label>Dashboard</q-item-label>
+            <q-item-label>Calendar</q-item-label>
           </q-item-section>
         </q-item>
         <q-item to="/temperature" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
-            <q-icon name="email"/>
+            <q-icon name="thermostat"/>
           </q-item-section>
           <q-item-section>
             <q-item-label>Temperature Forecast</q-item-label>
@@ -41,23 +41,16 @@
         </q-item>
         <q-item to="/wind" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
-            <q-icon name="email"/>
+            <q-icon name="water"/>
           </q-item-section>
           <q-item-section>
-            <q-item-label>Wind Speed Forecast</q-item-label>
+            <q-item-label>Temperature Forecast(LSTM)</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item to="/Mail" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="email"/>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Rainfall Forecast</q-item-label>
-          </q-item-section>
-        </q-item>
+
         <q-item to="/About" active-class="q-item-no-link-highlighting">
         <q-item-section avatar>
-          <q-icon name="email"/>
+          <q-icon name="face"/>
         </q-item-section>
         <q-item-section>
           <q-item-label>About us</q-item-label>
@@ -65,7 +58,7 @@
         </q-item>
         <q-item to="/login" @click="onLogout" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
-            <q-icon name="email"/>
+            <q-icon name="logout"/>
           </q-item-section>
           <q-item-section>
             <q-item-label>Logout</q-item-label>
@@ -109,7 +102,7 @@ export default {
       this.loggedIn = sessionStorage.getItem('loggedIn') !== null
       if(this.loggedIn) {
         if(this.$route.path === '/' || this.$route.path === '/reg')
-          this.$router.push('/index')
+          this.$router.push('/cal')
       }
       else {
 
