@@ -135,7 +135,7 @@ export default {
         labels: ["2021/26", "2021/7/27", "2021/7/28", "2021/7/29", "2021/7/30", "2021/7/31", "2021/8/1"],
         datasets: [
           {
-            label:"Temperatrue Max",
+            label:"Temperatrue Min",
             backgroundColor: [
               '#41B883',
             ],
@@ -155,7 +155,7 @@ export default {
             data: [28, 29, 31, 32, 26, 26, 26]
           },
           {
-            label:"Temperatrue Min",
+            label:"Temperatrue Max",
             backgroundColor: [
               '#E46651',
             ],
@@ -273,4 +273,3 @@ export default {
   border-radius: 8px;
 }
 </style>
-
