@@ -1,10 +1,9 @@
 from django.contrib.auth.hashers import make_password, check_password
-from django.shortcuts import render
-from django.http import HttpResponse
 from .models import User
 from .models import Comment
 from .models import Temperatures
 from .models import Windnhumid
+from .models import Lstm
 
 
 import json
@@ -223,6 +222,26 @@ def load_comments(request):
 
     return HttpResponse(json.dumps(dic))
 
+
+@csrf_exempt
+def lstm(request):
+    content = json.loads(request.body)
+    city = content['city']
+    print(city)
+    x = []
+    yavg = []
+    now = datetime.datetime.now()
+    for i in range(1, 8, 1):
+        d = (now + timedelta(days=i))
+        day_text = ("%s/%s/%s" % (d.year, d.month, d.day))
+        print(day_text)
+        info = Lstm.objects.get(city=city, date=day_text)
+        x.append(info.date)
+        yavg.append(info.tavg)
+
+    dic = {'status': "Success", 'x': x,  'yavg': yavg}
+
+    return HttpResponse(json.dumps(dic))
 
 
 

@@ -54,6 +54,18 @@ class Windnhumid(models.Model):
         db_table = 'windNhumid'
 
 
+class Lstm(models.Model):
+    index = models.IntegerField(primary_key=True)
+    city = models.CharField(max_length=45, blank=True, null=True)
+    date = models.CharField(max_length=45, blank=True, null=True)
+    tavg = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'LSTM'
+
+
+
 
 
 
