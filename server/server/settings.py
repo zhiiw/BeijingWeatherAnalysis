@@ -139,3 +139,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SIMPLEUI_DEFAULT_THEME = 'e-blue-pro.css'
 
 SIMPLEUI_LOGO = 'https://ftp.bmp.ovh/imgs/2021/07/01ae66c4fd98c75f.png'
+
