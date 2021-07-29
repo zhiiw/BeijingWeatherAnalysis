@@ -1,6 +1,9 @@
 <template>
   <q-page :class="bgclass">
-    <div id="q-app" style="min-height: 100vh;">
+    <div class="text-h3 text-weight-light flex flex-center text-white" style="height: 30vh">
+      Weather Query
+    </div>
+    <div id="q-app" style="min-height: 50vh;">
       <q-select filled color="purple-12" v-model="model" class="absolute-top-left" :options="options" label="City" style="color: aliceblue" label-color="white"
                 ></q-select>
       <div class="q-pa-md absolute-center " style="">
@@ -18,7 +21,7 @@
     </div>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-fab
-        icon="keyboard_arrow_left"
+        icon="keyboard_arrow_right"
         @click="trunToIndex"
         color="accent"
       >

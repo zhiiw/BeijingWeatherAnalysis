@@ -34,7 +34,7 @@
 
         <q-page-sticky position="bottom-right" :offset="[18, 18]">
           <q-fab
-            icon="keyboard_arrow_right"
+            icon="keyboard_arrow_left"
             @click="toCal"
             color="accent"
           >

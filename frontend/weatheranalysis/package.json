@@ -14,9 +14,11 @@
     "apexcharts": "^3.27.3",
     "axios": "^0.21.1",
     "chart.js": "^3.4.1",
+    "cordova": "^10.0.0",
     "core-js": "^3.6.5",
     "easy-danmaku-js": "^1.0.7",
     "echarts": "4.9.0",
+    "nodejs": "^0.0.0",
     "quasar": "^2.0.0",
     "timers": "^0.1.1",
     "v-charts": "^1.19.0",
@@ -24,7 +26,9 @@
     "vue-echarts-v3": "^2.0.1"
   },
   "devDependencies": {
-    "@quasar/app": "^3.0.0"
+    "@quasar/app": "^3.0.0",
+    "electron": "^13.1.7",
+    "electron-packager": "^15.2.0"
   },
   "browserslist": [
     "last 10 Chrome versions",

@@ -31,7 +31,7 @@
     <br><br>
 
     <div id='container'></div>
-    <div class="row">
+    <div class="col q-pt-lg q-px-md">
 
       <q-input
         filled
@@ -40,9 +40,9 @@
         lazy-rules
         :rules="[ val => val && val.length > 0 || 'Please type your danmu']"
       />
+      <q-btn  label="Send" @click="onSend" color="primary"/>
 
     </div>
-    <q-btn label="Send" @click="onSend" color="primary"/>
 
   </q-page>
 
@@ -260,7 +260,7 @@ export default {
 </script>
 <style>
 #container{
-  width:90vh;
+  width:200vh;
   height:40vh;
   margin:0 auto;
 }
