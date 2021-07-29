@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'api.apps.ApiConfig',
-    # 'simpleui',
 ]
 
 MIDDLEWARE = [
@@ -116,13 +116,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -135,10 +135,8 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = False   #是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
-EMAIL_USE_SSL = True    #是否使用SSL加密，qq企业邮箱要求使用
-EMAIL_HOST = 'smtp.qq.com'   #发送邮件的邮箱 的 SMTP服务器，这里用了qq邮箱
-EMAIL_PORT = 465     #发件箱的SMTP服务器端口
-EMAIL_HOST_USER = '2539496792@qq.com'    #发送邮件的邮箱地址
-EMAIL_HOST_PASSWORD = 'kbzuuegahcundjhj'         #发送邮件的邮箱密码(这里使用的是授权码)
+# 指定simpleui默认的主题,指定一个文件名，相对路径就从simpleui的theme目录读取
+SIMPLEUI_DEFAULT_THEME = 'e-blue-pro.css'
+
+SIMPLEUI_LOGO = 'https://ftp.bmp.ovh/imgs/2021/07/01ae66c4fd98c75f.png'
+

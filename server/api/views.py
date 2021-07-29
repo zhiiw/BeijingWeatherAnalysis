@@ -1,9 +1,9 @@
 from django.contrib.auth.hashers import make_password, check_password
-from django.shortcuts import render
-from django.http import HttpResponse
 from .models import User
-from .models import Comments
+from .models import Comment
 from .models import Temperatures
+from .models import Windnhumid
+from .models import Lstm
 
 
 import json
@@ -54,15 +54,12 @@ def register(request):
         dic['status'] = "Failed"
         dic['message'] = "Wrong Method"
         return HttpResponse(json.dumps(dic))
+
     try:
         post_content = json.loads(request.body)
         username = post_content['username']
         password = post_content['password']
         user = User.objects.get(username=username)
-    except (KeyError, json.decoder.JSONDecodeError):
-        dic['status'] = "Failed"
-        dic['message'] = "No Input"
-        return HttpResponse(json.dumps(dic))
     except User.DoesNotExist:
         dic['status'] = "Success"
         now = datetime.datetime.now()
@@ -71,6 +68,11 @@ def register(request):
                        time_created=now, last_login=now)
         newUser.save()
         return HttpResponse(json.dumps(dic))
+    except (KeyError, json.decoder.JSONDecodeError):
+        dic['status'] = "Failed"
+        dic['message'] = "No Input"
+        return HttpResponse(json.dumps(dic))
+
     if user is not None:
         dic['status'] = "Failed"
         dic['message'] = "User exist"
@@ -81,6 +83,7 @@ def register(request):
 def forecast(request):  #指定城市未来七天温度预测
     content = json.loads(request.body)
     city = content['city']
+    print(city)
     x = []
     ymin = []
     yavg = []
@@ -105,16 +108,36 @@ def everyday(request):  #指定日期指定城市查询天气
     content = json.loads(request.body)
     date = content['date']
     city = content['city']
+    print(date)
+    print(city)
+    d = datetime.datetime.strptime(date, "%Y/%m/%d")
+    day_text = ("%s/%s/%s" % (d.year, d.month, d.day))
+    print(day_text)
 
     try:
-        info = Temperatures.objects.get(city=city, date=date)
+        info = Temperatures.objects.get(city=city, date=day_text)
         tavg = info.tavg
         tmin = info.tmin
         tmax = info.tmax
         weather = info.con
+        extra = Windnhumid.objects.get(city=city, date=day_text)
+        wind = extra.wind
+        humid = extra.humid
     except Temperatures.DoesNotExist:
         dic = {'status': "Failed", 'message': "No information"}
         return HttpResponse(json.dumps(dic))
+    except Windnhumid.DoesNotExist:
+        dic = {'status': "Failed", 'message': "No information"}
+        return HttpResponse(json.dumps(dic))
+
+    if weather == "rainy" and humid+15 <= 90:
+        humid = humid + 15
+
+    if weather == "cloudy" and humid+5 <= 90:
+        humid = humid + 5
+
+    if weather == "sunny" and humid-10 >= 5:
+        humid = humid - 10
 
     if tavg > 23:
         wearing = "T-shirts"
@@ -127,15 +150,16 @@ def everyday(request):  #指定日期指定城市查询天气
 
     if weather == "rainy":
         travel = "Bring an umbrella"
-    elif weather == "cloudy" and 20 < tavg < 28:
+    elif weather == "cloudy" and 20 < tavg < 28 and wind < 8 and 30 < humid < 80:
         travel = "very suitable"
-    elif tavg > 32 or tavg < 5:
+    elif tavg > 32 or tavg < 5 or wind >= 8 or humid <= 30 or humid >= 80:
         travel = "not very suitable"
     else:
         travel = "suitable"
 
     dic = {'status': "Success", 'tmin': tmin, 'tavg': tavg,
-           'tmax': tmax, 'weather': weather, 'wearing': wearing, 'travel': travel}
+           'tmax': tmax, 'weather': weather, 'wearing': wearing,
+           'travel': travel, 'city': city, 'date': date, 'windspeed': wind, 'RH': humid}
 
     return HttpResponse(json.dumps(dic))
 
@@ -173,14 +197,14 @@ def send_comment(request):
         return HttpResponse(json.dumps(dic))
 
     dic['status'] = "Success"
-    newComment = Comments(user_id=user, text=text)
+    newComment = Comment(user_id=user, text=text)
     newComment.save()
     return HttpResponse(json.dumps(dic))
 
 
 @csrf_exempt
 def load_comments(request):
-    comments = Comments.objects.all()
+    comments = Comment.objects.all()
 
     if comments.count() == 0:
         dic = {'status': "Failed", 'message': "no comments"}
@@ -199,6 +223,26 @@ def load_comments(request):
 
     return HttpResponse(json.dumps(dic))
 
+
+@csrf_exempt
+def lstm(request):
+    content = json.loads(request.body)
+    city = content['city']
+    print(city)
+    x = []
+    yavg = []
+    now = datetime.datetime.now()
+    for i in range(1, 8, 1):
+        d = (now + timedelta(days=i))
+        day_text = ("%s/%s/%s" % (d.year, d.month, d.day))
+        print(day_text)
+        info = Lstm.objects.get(city=city, date=day_text)
+        x.append(info.date)
+        yavg.append(info.tavg)
+
+    dic = {'status': "Success", 'x': x,  'yavg': yavg}
+
+    return HttpResponse(json.dumps(dic))
 
 
 
